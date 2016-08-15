@@ -1,0 +1,2 @@
+defmodule ConsulInformant do
+end
