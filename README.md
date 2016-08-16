@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lochnesh/consul_informant.svg?branch=master)](https://travis-ci.org/lochnesh/consul_informant)
+
 # ConsulInformant
 
 Monitor Consul for service changes and perform some actions
