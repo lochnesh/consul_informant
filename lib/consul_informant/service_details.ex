@@ -17,7 +17,7 @@ defmodule ServiceDetails do
     {
       :producer_consumer,
       consul_index,
-      subscribe_to: [{ServiceProducer, max_demand: 1}]
+      subscribe_to: [Services]
     }
   end
 

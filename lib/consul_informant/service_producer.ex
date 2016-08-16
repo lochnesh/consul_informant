@@ -10,20 +10,18 @@ defmodule ServiceProducer do
   use GenStage
 
   def start_link()  do
-    {services, _} = get_services()
-    GenStage.start_link(__MODULE__, services, name: __MODULE__)
+    GenStage.start_link(__MODULE__, 0, name: __MODULE__)
   end
 
-  def init(state) do
-    {:producer, state}
+  def init(index) do
+    {:producer, index}
   end
 
-  def handle_demand(demand, services) when demand > 0 do
-    {events, remainder} = Enum.split(services, demand)
-    {new_services, _} = get_services()
-    {:noreply, events, Enum.uniq(remainder ++ new_services)}
+  def handle_demand(demand, index) when demand > 0 do
+    {services, new_index} = get_services(index)
+    {:noreply, services, new_index}
   end
 
-  def get_services(), do: Client.get_all_services()
+  def get_services(index), do: Client.get_all_services(index)
 
 end

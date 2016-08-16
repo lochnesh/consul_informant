@@ -9,6 +9,7 @@ defmodule ConsulInformant do
 
     children = [
       worker(ServiceProducer, []),
+      worker(Services, []),
       worker(ServiceDetails, []),
       worker(ServicePrinter, [])
     ]

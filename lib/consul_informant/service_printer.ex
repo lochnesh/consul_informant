@@ -13,7 +13,7 @@ defmodule ServicePrinter do
   end
 
   def init(:ok) do
-    {:consumer, :ok, subscribe_to: [{ServiceDetails, max_demand: 1}]}
+    {:consumer, :ok, subscribe_to: [ServiceDetails]}
   end
 
   def handle_events(events, _from, state) do
