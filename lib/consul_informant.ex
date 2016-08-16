@@ -11,7 +11,8 @@ defmodule ConsulInformant do
       worker(ServiceProducer, []),
       worker(Services, []),
       worker(ServiceDetails, []),
-      worker(ServicePrinter, [])
+      worker(ServicePrinter, []),
+      worker(ServiceHealth, [])
     ]
 
     opts = [strategy: :one_for_one, name: ConsulInformant.Supervisor]

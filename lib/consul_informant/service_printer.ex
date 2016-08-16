@@ -19,7 +19,7 @@ defmodule ServicePrinter do
   def handle_events(events, _from, state) do
     :timer.sleep(1000)
 
-    Logger.info("received #{inspect events}")
+    Logger.debug("received #{inspect events}")
 
     {:noreply, [], state}
   end

@@ -10,22 +10,22 @@ defmodule ServiceDetails do
   use GenStage
 
   def start_link() do
-    GenStage.start_link(__MODULE__, 0, name: __MODULE__)
+    GenStage.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  def init(consul_index) do
+  def init(state) do
     {
       :producer_consumer,
-      consul_index,
+      state,
       subscribe_to: [Services]
     }
   end
 
-  def handle_events(events, _from, consul_index) do
-    Logger.info("got events = #{events}")
-    services = Enum.map(events, &(Client.get_services(&1, consul_index)))
-    Logger.info("#{inspect services}")
-    {:noreply, [services], consul_index}
+  def handle_events(events, _from, state) do
+    Logger.debug("got events = #{events}")
+    services = Enum.map(events, &({&1, Client.get_services(&1)}))
+    Logger.debug("#{inspect services}")
+    {:noreply, services, state}
   end
 
 end
