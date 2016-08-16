@@ -2,7 +2,7 @@ alias Experimental.GenStage
 
 defmodule Services do
   @moduledoc """
-  A prodcuer_consumer that maintains a list of services
+  A producer_consumer that maintains a list of services
   """
 
   require Logger
@@ -16,7 +16,7 @@ defmodule Services do
     {
       :producer_consumer,
       services,
-      subscribe_to: [{ServiceProducer, max_demand: 1}]
+      subscribe_to: [{ServiceProducer, max_demand: 10, min_demand: 1}]
     }
   end
 
