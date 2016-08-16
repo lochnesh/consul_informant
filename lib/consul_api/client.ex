@@ -1,29 +1,31 @@
 defmodule ConsulApi.Client do
-  @timeout 30000
+  @moduledoc """
+  Functions that call the Consul api
+  """
+
+  @timeout 30_000
 
   def get_all_services(index \\ 0) do
-    HTTPoison.start
-    {:ok, response} = HTTPoison.get(
-     "#{consul_url()}/v1/catalog/services?index=#{index}&wait=25s",
-     [],
-     [{:timeout, @timeout}, {:recv_timeout, @timeout}, hackney: [:insecure]])
-
+    response = call_consul("/v1/catalog/services?index=#{index}&wait=25s")
     index = get_index(response)
     json = JSX.decode!(response.body)
     {Map.keys(json), index}
   end
 
-  def get_services(service, index \\ 0) do 
-    HTTPoison.start
-    {:ok, response} = HTTPoison.get(
-    "#{consul_url()}/v1/health/service/#{service}?passing=true&index=#{index}&wait=25s",
-    [],
-    [{:timeout, @timeout}, {:recv_timeout, @timeout}, hackney: [:insecure]])
+  def get_services(service, index \\ 0) do
+    service_url = "/v1/health/service/#{service}"
+    params = "?passing=true&index=#{index}&wait=25s"
+    response = call_consul("#{service_url}#{params}")
     JSX.decode!(response.body)
   end
 
-  defp consul_url() do
-    System.get_env("CONSUL_URL")
+  defp call_consul(path) do
+    HTTPoison.start
+    {:ok, response} = HTTPoison.get(
+      "#{consul_url()}#{path}",
+      [],
+      [{:timeout, @timeout}, {:recv_timeout, @timeout}, hackney: [:insecure]])
+    response
   end
 
   defp get_index(response) do
@@ -34,6 +36,10 @@ defmodule ConsulApi.Client do
       end
     end)
     index
+  end
+
+  defp consul_url() do
+    System.get_env("CONSUL_URL")
   end
 
 end

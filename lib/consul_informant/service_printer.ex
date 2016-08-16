@@ -1,6 +1,10 @@
 alias Experimental.GenStage
 
 defmodule ServicePrinter do
+  @moduledoc """
+  A consumer that prints the details of a service
+  """
+
   require Logger
   use GenStage
 

@@ -21,7 +21,8 @@ defmodule ConsulInformant.Mixfile do
     [
       {:exjsx, "~> 3.2"},
       {:gen_stage, "~> 0.4"},
-      {:httpoison, "~> 0.9.0"}
+      {:httpoison, "~> 0.9.0"},
+      {:credo, "~> 0.4", only: [:dev, :test]}
     ]
   end
 end

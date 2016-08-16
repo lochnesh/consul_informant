@@ -1,6 +1,11 @@
 alias Experimental.GenStage
+alias ConsulApi.Client
 
 defmodule ServiceProducer do
+  @moduledoc """
+  A producer that gets all services from Consul
+  """
+
   require Logger
   use GenStage
 
@@ -19,6 +24,6 @@ defmodule ServiceProducer do
     {:noreply, events, Enum.uniq(remainder ++ new_services)}
   end
 
-  def get_services(), do: ConsulApi.Client.get_all_services()
+  def get_services(), do: Client.get_all_services()
 
 end

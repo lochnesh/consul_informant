@@ -1,4 +1,7 @@
 defmodule ConsulInformant do
+  @moduledoc """
+  Consul informat loads data from Consul and processes it
+  """
 
   def start(_type, _args) do
     import Supervisor.Spec
@@ -14,5 +17,5 @@ defmodule ConsulInformant do
     Supervisor.start_link(children, opts)
   end
 
-  
+
 end
