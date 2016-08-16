@@ -17,8 +17,11 @@ defmodule ServiceHealth do
   end
 
   def handle_events(events, _from, state) do
-    new_state = Enum.reduce(events, state, fn(x, acc) -> process_service(x, acc) end)
-    {:noreply, [], new_state}
+    {
+      :noreply,
+      [],
+      events |> Enum.reduce(state, &(process_service(&1, &2)))
+    }
   end
 
   defp process_service({service, details}, state) do
@@ -30,10 +33,18 @@ defmodule ServiceHealth do
       state
     else
       time = get_time()
-      {prior, new_state} = Map.get_and_update(state, service, fn c -> {c, {healthy_count, time}} end)
+      {prior, new_state} = Map.get_and_update(
+        state,
+        service,
+        &({&1, {healthy_count, time}}))
       case prior do
         nil -> Logger.info "#{service} : set initial count to #{healthy_count}"
-        {old_value, old_time} -> log_change(service, old_value, old_time, healthy_count, time)
+        {old_value, old_time} -> log_change(
+          service,
+          old_value,
+          old_time,
+          healthy_count,
+          time)
       end
       new_state
     end
@@ -43,6 +54,7 @@ defmodule ServiceHealth do
     System.system_time(:seconds)
   end
 
+  @lint {Credo.Check.Readability.MaxLineLength, false}
   defp log_change(service, prior_count, prior_time, current, time) do
     message = "#{service} : healthy count changed from #{prior_count} to #{current} has been #{time - prior_time} seconds since last change"
     if current == 0 do
