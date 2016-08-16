@@ -9,6 +9,12 @@ mix deps.get
 CONSUL_URL=http://localhost:8500 iex -S mix
 ```
 
+##Tests
+
+```
+mix test
+```
+
 ##Code analysis
 
 ```
